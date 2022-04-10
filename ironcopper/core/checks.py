@@ -1,11 +1,11 @@
 """
-# Core Mechanics
+# Roll Mechanics and Checks
 
 Iron & Copper, like any good pen-and-paper RPG uses dice to determine the outcome of actions.
 There are only 3 basic types of rolls that are used for all mechanics of the game:
 
-- **Skill checks** determine whether an action succeeds or fails.
-- **Extended skill checks** determine how long an action takes.
+- **Checks** determine whether an action succeeds or fails.
+- **Extended checks** determine how long an action takes.
   Failure happens in case there is a timelimit, which is exceeded.
 - **Damage rolls** determine how much damage an offensive action inflicts.
   Note that not all offensive actions rely on damage rolls.
@@ -21,7 +21,7 @@ from typing import Optional, Tuple
 def d20(adv: int = 0) -> int:
     """
     Rolls a 20-sided die (D20) and returns the result — the higher, the better.
-    This is commonly used for skill checks and extended skill checks.
+    This is commonly used for checks and extended checks.
 
     There is a twist though:
     - With **advantage**, multiple dice are rolled, the result is determined by the highest die.
@@ -50,7 +50,7 @@ def d20(adv: int = 0) -> int:
     else:
         result = min(rolls)
 
-    if verboseRolls:
+    if verboseChecks:
         if adv != 0:
             print(f'{_d20label(adv)}: {rolls} → {result}')
         else:
@@ -92,7 +92,7 @@ def d6(count: int = 1, critical: bool = False) -> int:
     if critical:
         result += count * 6
 
-    if verboseRolls:
+    if verboseChecks:
         if count > 1:
             print(f'{_d6label(count=count, critical=critical)}: {rolls} → {result}')
         else:
@@ -110,7 +110,7 @@ def _d6label(count: int = 1, critical: bool = False) -> str:
 
 class Outcome(Enum):
     """
-    Skill checks can result in various outcomes.
+    Checks can result in various outcomes.
     These are explained here.
     """
 
@@ -148,7 +148,7 @@ class Outcome(Enum):
 
 def check(threshold: int, adv: int = 0) -> Outcome:
     """
-    A skill check rolls a D20 (optionally with advantage / disadvantage) against a given threshold.
+    A check rolls a D20 (optionally with advantage / disadvantage) against a given threshold.
     """
 
     roll = d20(adv=adv)
@@ -167,7 +167,7 @@ def check(threshold: int, adv: int = 0) -> Outcome:
 
 def extendedCheck(threshold: int, maxRolls: Optional[int] = None) -> Tuple[Outcome, int]:
     """
-    An extended skill check accumulates D20 rolls until, either, a given threshold is reached, or a maximum number of rolls is exhausted.
+    An extended check accumulates D20 rolls until, either, a given threshold is reached, or a maximum number of rolls is exhausted.
     Each roll corresponds to a fixed in-game time period spent working on the task.
     If the maximum number of rolls (i.e. time limit) is exhausted, the check fails.
     Rolling a 1 or 20 does not immediately fail or succeed the task.
@@ -203,5 +203,5 @@ Allows one to set a specific seed for the random number generator (RNG).
 This allows rolls to be reproducible.
 """
 
-verboseRolls = True
+verboseChecks = True
 """Enabling this option shows the result of dice rolls."""
